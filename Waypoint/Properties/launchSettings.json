@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Waypoint": {
+      "commandName": "Project",
+      "commandLineArgs": "--startLat 43.48488343\r\n--startLong 16.26604836\r\n--destLat 43.48460171\r\n--destLong 16.26619018"
+    }
+  }
+}

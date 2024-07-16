@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DockControl": {
+      "commandName": "Project",
+      "commandLineArgs": "--destLat 43.48460171\r\n--destLong 16.26619018\r\n--broker test.mosquitto.org\r\n--nav brod/navControl\r\n--boat brod/boatResponse"
+    }
+  }
+}
