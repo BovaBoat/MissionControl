@@ -1,6 +1,7 @@
 ﻿using MQTTnet;
 using MQTTnet.Client;
 using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Text;
 using Waypoint;
 
@@ -39,27 +40,24 @@ namespace Navigation
             }
 
             var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer(_mqttCommunicationConfig.BrokerAddress).Build();
-
-            _mqttClient!.ApplicationMessageReceivedAsync += async e =>
-            {
-                lock (_responseLock)
-                {
-                    Trace.WriteLine("Received application message.");
-                    var payloadString = System.Text.Encoding.Default.GetString(e.ApplicationMessage.PayloadSegment);
-
-                    var payloadBytesList = Encoding.ASCII.GetBytes(payloadString).ToList();
-                    _responseMessage = new NavMessage(payloadBytesList);
-
-                    _isResponseReceived.Set();
-                }
-            };
-
+            _mqttClient!.ApplicationMessageReceivedAsync += OnApplicationMessageReceivedAsync;
             await _mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
-
             await SubscribeToTopic(_mqttCommunicationConfig.BoatResponseTopic);
-
-            Console.WriteLine("MQTT client subscribed to topic.");
         }
+
+        private async Task OnApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs e)
+        {
+            lock (_responseLock)
+            {
+                Trace.WriteLine("Received application message.");
+                var payloadString = System.Text.Encoding.Default.GetString(e.ApplicationMessage.PayloadSegment);
+                var payloadBytesList = Encoding.ASCII.GetBytes(payloadString).ToList();
+                _responseMessage = new NavMessage(payloadBytesList);
+
+                _isResponseReceived.Set();
+            }
+        }
+
 
         public async Task StartMission(Coordinates destinationCoordinates)
         {
@@ -71,23 +69,29 @@ namespace Navigation
             var payload = new List<byte>
             {
                 (byte)CommandsCodeEnum.START_MISSION
+
             };
 
-            payload.AddRange(CoordinatesToByteArray(destinationCoordinates));
+            payload.AddRange(destinationCoordinates.ToByteList());
 
             await SendMessage(payload, _mqttCommunicationConfig.NavControlTopic);
 
             try
             {
-                AwaitResponse(_mqttCommunicationConfig.BoatResponseTopic);
+                var responsePayload = AwaitResponse(CommandsCodeEnum.START_MISSION);
+
+                if ((BoatResponseCodeEnum)responsePayload[0] != BoatResponseCodeEnum.OK)
+                {
+                    throw new Exception("Error received from boat side");
+                }
             }
             catch (ResponseTimeoutException ex)
             {
                 Console.WriteLine($"{ex.Message}");
-            }           
+            }
         }
 
-        private void AwaitResponse(string topicName)
+        private List<byte> AwaitResponse(CommandsCodeEnum commandCode)
         {
             if (!_isConfigured)
             {
@@ -106,17 +110,15 @@ namespace Navigation
                 if (_isResponseReceived.WaitOne(10))
                 {                    
                     break;
-                }
+                }                   
             }
 
-            Console.WriteLine("Response received");
-        }
+            if (_responseMessage.CommandCode != commandCode)
+            {
+                throw new Exception("Wrong command code received in response");
+            }
 
-        class ResponseTimeoutException : Exception
-        {
-            public ResponseTimeoutException(string message)
-            : base(message)
-            { }
+            return _responseMessage.Payload;
         }
 
         public async Task SendMessage(List<byte> payload, string topic)
@@ -133,25 +135,10 @@ namespace Navigation
             .WithRetainFlag(false)
             .Build();
 
-            // Publish the message
             await _mqttClient.PublishAsync(message, CancellationToken.None);
-            Console.WriteLine("Message published.");
         }
 
         #endregion
-
-        private List<byte> CoordinatesToByteArray(Coordinates coordinates)
-        {
-            var lattitudeBytes = BitConverter.GetBytes(coordinates.GetLatitude());
-            var lattitudeBytesList = new List<byte>(lattitudeBytes);
-
-            var longtiudeBytes = BitConverter.GetBytes(coordinates.GetLongitude());
-            var longtiudeBytesList = new List<byte>(longtiudeBytes);
-
-            longtiudeBytesList.AddRange(longtiudeBytesList);
-
-            return longtiudeBytesList;
-        }
 
         private async Task SubscribeToTopic(string topic)
         {
@@ -187,6 +174,12 @@ namespace Navigation
     {
         None = 0,
         START_MISSION = 0x01,
-        GET_LOCATION = 0x02
+        GET_LOCATION = 0x02,
+        GREEN_LIGTH = 0x03,
+    }
+
+    public enum BoatResponseCodeEnum
+    {
+        OK,
     }
 }

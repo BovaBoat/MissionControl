@@ -35,5 +35,18 @@
         {
             return (Math.PI / 180) * val;
         }
+
+        public List<byte> ToByteList()
+        {
+            var lattitudeInBytes = BitConverter.GetBytes(_latitude);
+            var longitudeInBytes = BitConverter.GetBytes(_longitude);
+
+            var coordinatesByteList = new List<byte>();
+
+            coordinatesByteList.AddRange(lattitudeInBytes);
+            coordinatesByteList.AddRange(longitudeInBytes);
+
+            return coordinatesByteList;
+        }
     }
 }
