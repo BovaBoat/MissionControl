@@ -16,7 +16,7 @@ namespace Navigation
         private MqttFactory? _mqttFactory;
         private MqttCommunicationConfig _mqttCommunicationConfig;
         private bool _isConfigured = false;
-        private ManualResetEvent _isResponseReceived;
+        private AutoResetEvent _isResponseReceived;
         private NavMessage _responseMessage;
         private object _responseLock = new object();
 
@@ -27,7 +27,7 @@ namespace Navigation
             _mqttCommunicationConfig = mqttConfig;
             _mqttFactory = new MqttFactory();
             _mqttClient = _mqttFactory.CreateMqttClient();
-            _isResponseReceived = new ManualResetEvent(false);
+            _isResponseReceived = new AutoResetEvent(false);
 
             _isConfigured = true;
         }
@@ -58,7 +58,6 @@ namespace Navigation
             }
         }
 
-
         public async Task StartMission(Coordinates destinationCoordinates)
         {
             if (!_isConfigured)
@@ -66,21 +65,19 @@ namespace Navigation
                 throw new Exception("Communication parameters are not configured");
             }
 
-            var payload = new List<byte>
-            {
-                (byte)CommandsCodeEnum.START_MISSION
-
-            };
-
-            payload.AddRange(destinationCoordinates.ToByteList());
-
-            await SendMessage(payload, _mqttCommunicationConfig.NavControlTopic);
-
             try
             {
+                await StartMissionCommand(destinationCoordinates);
                 var responsePayload = AwaitResponse(CommandsCodeEnum.START_MISSION);
+                if (!IsErrorResponse((BoatResponseCodeEnum)responsePayload[0]))
+                {
+                    throw new Exception("Error received from boat side");
+                }
 
-                if ((BoatResponseCodeEnum)responsePayload[0] != BoatResponseCodeEnum.OK)
+                await MissionStartConfirmationCommand();
+
+                responsePayload = AwaitResponse(CommandsCodeEnum.GREEN_LIGTH);
+                if (!IsErrorResponse((BoatResponseCodeEnum)responsePayload[0]))
                 {
                     throw new Exception("Error received from boat side");
                 }
@@ -89,6 +86,33 @@ namespace Navigation
             {
                 Console.WriteLine($"{ex.Message}");
             }
+        }
+
+        private async Task StartMissionCommand(Coordinates destinationCoordinates)
+        {
+            var payload = new List<byte>
+            {
+                    (byte)CommandsCodeEnum.START_MISSION
+            };
+
+            payload.AddRange(destinationCoordinates.ToByteList());
+
+            await SendMessage(payload, _mqttCommunicationConfig.NavControlTopic);
+        }
+
+        private bool IsErrorResponse(BoatResponseCodeEnum reponse)
+        {
+            return reponse == BoatResponseCodeEnum.OK;
+        }
+
+        private async Task MissionStartConfirmationCommand()
+        {
+            var payload = new List<byte>
+            {
+                (byte)CommandsCodeEnum.GREEN_LIGTH
+            };
+
+            await SendMessage(payload, _mqttCommunicationConfig.NavControlTopic);
         }
 
         private List<byte> AwaitResponse(CommandsCodeEnum commandCode)
