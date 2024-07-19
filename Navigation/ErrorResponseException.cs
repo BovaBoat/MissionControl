@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Navigation
+namespace Waypoint
 {
-    class ResponseTimeoutException : Exception
+    public class ErrorResponseException : Exception
     {
-        public ResponseTimeoutException(string message)
+        public ErrorResponseException(string message)
         : base(message)
-        { 
-            
+        {
+
         }
     }
 }

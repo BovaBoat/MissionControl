@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Navigation\Navigation.csproj" />
+    <ProjectReference Include="..\Navigation\MissionControl.csproj" />
     <ProjectReference Include="..\Waypoint\Waypoint.csproj" />
   </ItemGroup>
 

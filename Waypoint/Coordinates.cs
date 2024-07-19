@@ -2,6 +2,8 @@
 {
     public class Coordinates
     {
+        const int COORDINATE_BYTES_COMBINED_LENGTH = 8;
+
         private double _latitude;
         private double _longitude;
 
@@ -47,6 +49,21 @@
             coordinatesByteList.AddRange(longitudeInBytes);
 
             return coordinatesByteList;
+        }
+
+        public static Coordinates FromByteList(List<byte> byteList)
+        {
+            if (byteList.Count != COORDINATE_BYTES_COMBINED_LENGTH)
+            {
+                throw new ArgumentOutOfRangeException("Invalid length of byte list containing coordinates");
+            }
+
+            var lattitudeInBytes = byteList.GetRange(0, 8).ToArray();
+            var longitudeInBytes = byteList.GetRange(8, 8).ToArray();
+
+            var coordinates = new Coordinates(BitConverter.ToDouble(lattitudeInBytes, 0), BitConverter.ToDouble(longitudeInBytes, 0));
+
+            return coordinates;
         }
     }
 }

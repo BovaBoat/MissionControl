@@ -23,7 +23,7 @@ namespace DockControl
                 .WithParsed(parsedOptions => dockControlCmdOptions = parsedOptions);
 
             var destinationCoordinates = new Coordinates(dockControlCmdOptions.DestinationLatitude, dockControlCmdOptions.DestinationLongitude);
-            var navigationControl = new BoatNavigationControl();
+            var navigationControl = new MissionControl();
 
             var communicationConfig = new MqttCommunicationConfig
             {
