@@ -10,8 +10,4 @@
     <PackageReference Include="MQTTnet" Version="4.3.6.1152" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Waypoint\Waypoint.csproj" />
-  </ItemGroup>
-
 </Project>

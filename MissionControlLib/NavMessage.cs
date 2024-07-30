@@ -1,7 +1,6 @@
-﻿
-using System;
+﻿using System;
 
-namespace Navigation
+namespace MissionControlLib
 {
     public class NavMessage
     {

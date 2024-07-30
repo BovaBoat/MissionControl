@@ -1,6 +1,7 @@
+using MissionControlLib.Waypoints;
 using NUnit.Framework;
 
-namespace Waypoint.Test.Unit
+namespace MissionControlLib.Test.Unit
 {
     [TestFixture]
     public class WaypointTests

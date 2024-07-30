@@ -1,4 +1,4 @@
-﻿namespace Waypoint
+﻿namespace MissionControlLib.Waypoints
 {
     public static class WaypointValidator
     {

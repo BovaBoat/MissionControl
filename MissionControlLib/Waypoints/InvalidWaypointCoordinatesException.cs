@@ -1,5 +1,4 @@
-﻿
-namespace Waypoint
+﻿namespace MissionControlLib.Waypoints
 {
     public class InvalidWaypointCoordinatesException : Exception
     {

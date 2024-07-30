@@ -1,6 +1,6 @@
 ﻿using CommandLine;
-using Navigation;
-using Waypoint;
+using MissionControlLib.Waypoints;
+using MissionControlLib;
 
 namespace DockControl
 {
@@ -41,7 +41,7 @@ namespace DockControl
             Console.ReadKey();
         }
 
-        private static void PrintDistanceBetweenWaypoints(Waypoint.Waypoint point1, Waypoint.Waypoint point2)
+        private static void PrintDistanceBetweenWaypoints(Waypoint point1, Waypoint point2)
         {
             Console.WriteLine($"Distance between start and destination: {point1.GetDistanceTo(point2)}");
         }

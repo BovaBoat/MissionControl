@@ -1,4 +1,4 @@
-﻿namespace Waypoint
+﻿namespace MissionControlLib.Waypoints
 {
     public class Coordinates
     {
@@ -21,11 +21,11 @@
             uint EARTH_RADIUS_IN_METERS = 6371000;
             uint R = EARTH_RADIUS_IN_METERS;
 
-            double dLat = this.toRadian(other._latitude - _latitude);
-            double dLon = this.toRadian(other._longitude - _longitude);
+            double dLat = toRadian(other._latitude - _latitude);
+            double dLon = toRadian(other._longitude - _longitude);
 
             double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-                Math.Cos(this.toRadian(_latitude)) * Math.Cos(this.toRadian(other._longitude)) *
+                Math.Cos(toRadian(_latitude)) * Math.Cos(toRadian(other._longitude)) *
                 Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
             double c = 2 * Math.Asin(Math.Min(1, Math.Sqrt(a)));
             double d = R * c;
@@ -35,7 +35,7 @@
 
         private double toRadian(double val)
         {
-            return (Math.PI / 180) * val;
+            return Math.PI / 180 * val;
         }
 
         public List<byte> ToByteList()

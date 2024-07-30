@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Navigation
+namespace MissionControlLib
 {
     internal class UnknownCommandException : Exception
     {

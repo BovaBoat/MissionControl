@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Waypoint", "Waypoint\Waypoint.csproj", "{DE15DF4A-ABD4-4D28-A729-D3748379AA1B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Waypoint.Test.Unit", "Waypoint.Test.Unit\Waypoint.Test.Unit.csproj", "{3EE40C21-AC4A-4B93-9FB4-2782A22795DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MissionControlLib.Test.Unit", "Waypoint.Test.Unit\MissionControlLib.Test.Unit.csproj", "{3EE40C21-AC4A-4B93-9FB4-2782A22795DE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DockControl", "DockControl\DockControl.csproj", "{E50F2BDE-9933-4745-8A99-2CF3FB755D40}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MissionControl", "Navigation\MissionControl.csproj", "{0ADBAA92-4616-4FBD-9F53-FA4AF60F5102}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MissionControl.Test.Integration", "MissionControl.Test.Integration\MissionControl.Test.Integration.csproj", "{349D6B68-DD25-4FB2-BB76-D21966783049}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MissionControl.Test.Integration", "MissionControl.Test.Integration\MissionControl.Test.Integration.csproj", "{349D6B68-DD25-4FB2-BB76-D21966783049}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MissionControlLib", "MissionControlLib\MissionControlLib.csproj", "{FBC282B3-2F7A-47B8-96CB-B2870D994815}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DE15DF4A-ABD4-4D28-A729-D3748379AA1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE15DF4A-ABD4-4D28-A729-D3748379AA1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DE15DF4A-ABD4-4D28-A729-D3748379AA1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE15DF4A-ABD4-4D28-A729-D3748379AA1B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3EE40C21-AC4A-4B93-9FB4-2782A22795DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3EE40C21-AC4A-4B93-9FB4-2782A22795DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EE40C21-AC4A-4B93-9FB4-2782A22795DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -31,14 +25,14 @@ Global
 		{E50F2BDE-9933-4745-8A99-2CF3FB755D40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E50F2BDE-9933-4745-8A99-2CF3FB755D40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E50F2BDE-9933-4745-8A99-2CF3FB755D40}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0ADBAA92-4616-4FBD-9F53-FA4AF60F5102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0ADBAA92-4616-4FBD-9F53-FA4AF60F5102}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0ADBAA92-4616-4FBD-9F53-FA4AF60F5102}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0ADBAA92-4616-4FBD-9F53-FA4AF60F5102}.Release|Any CPU.Build.0 = Release|Any CPU
 		{349D6B68-DD25-4FB2-BB76-D21966783049}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{349D6B68-DD25-4FB2-BB76-D21966783049}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{349D6B68-DD25-4FB2-BB76-D21966783049}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{349D6B68-DD25-4FB2-BB76-D21966783049}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBC282B3-2F7A-47B8-96CB-B2870D994815}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBC282B3-2F7A-47B8-96CB-B2870D994815}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBC282B3-2F7A-47B8-96CB-B2870D994815}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBC282B3-2F7A-47B8-96CB-B2870D994815}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

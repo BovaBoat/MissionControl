@@ -1,11 +1,10 @@
-﻿using MQTTnet;
+﻿using MissionControlLib.Waypoints;
+using MQTTnet;
 using MQTTnet.Client;
 using System.Diagnostics;
-using System.Linq.Expressions;
 using System.Text;
-using Waypoint;
 
-namespace Navigation
+namespace MissionControlLib
 {
     public class MissionControl
     {

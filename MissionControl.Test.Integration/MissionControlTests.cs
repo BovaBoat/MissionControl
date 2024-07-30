@@ -1,8 +1,8 @@
-using Navigation;
+using MissionControlLib;
+using MissionControlLib.Waypoints;
 using NUnit.Framework;
-using Waypoint;
 
-namespace MissionControl.Test.Integration
+namespace MissionControlLib.Test.Integration
 {
     [TestFixture]
     public class MissionControlIntegrationTests
@@ -22,7 +22,7 @@ namespace MissionControl.Test.Integration
         [Test]
         public async Task SendMissionStartCommand_WhenMessagePayloadIsValid_ShouldNotThrow()
         {
-            var missionControl = new Navigation.MissionControl();
+            var missionControl = new MissionControl();
             var mockCoordinates = new Coordinates(0, 0);
 
             missionControl.Configure(communicationConfig);
