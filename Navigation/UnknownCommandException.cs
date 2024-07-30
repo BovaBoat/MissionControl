@@ -8,7 +8,6 @@ namespace Navigation
 {
     internal class UnknownCommandException : Exception
     {
-
         CommandsCodeEnum CommandCode { get; }
         public UnknownCommandException(CommandsCodeEnum commandCode, string message)
             : base(message)

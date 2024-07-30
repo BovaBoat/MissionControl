@@ -3,39 +3,31 @@ using System;
 
 namespace Navigation
 {
-    internal class NavMessage
+    public class NavMessage
     {
         private const int COMMAND_CODE_INDEX = 0;
         public CommandsCodeEnum CommandCode { get; }
-        public List<byte> Payload { get; }
+        public List<byte>? Payload { get; }
 
-        public NavMessage(List<byte>? payload)
+        public NavMessage(CommandsCodeEnum commandCode, List<byte>? payload = null)
         {
-            if (payload == null)
+            if (!IsComandCodeValid(commandCode))
             {
-                throw new ArgumentNullException(nameof(Payload));
+                throw new Exception($"The command code is not valid.");
             }
 
-            if (payload!.Any() != true)
+            CommandCode = commandCode;
+            Payload = payload;
+        }
+
+        private bool IsComandCodeValid(CommandsCodeEnum commandCode)
+        {
+            if (!Enum.IsDefined<CommandsCodeEnum>(commandCode))
             {
-                throw new Exception("No data received in response payload");
+                return false;
             }
 
-            CommandCode = (CommandsCodeEnum)payload[COMMAND_CODE_INDEX];
-
-            if (!Enum.IsDefined<CommandsCodeEnum>(CommandCode))
-            {
-                throw new UnknownCommandException(CommandCode, "Unknown command code received");
-            }
-
-            if (payload.Count > 1)
-            {
-                Payload = payload.GetRange(COMMAND_CODE_INDEX + 1, payload.Count - 1);
-            }
-            else
-            {
-                Payload = new List<byte>();
-            }         
+            return true;
         }
     }
 }

@@ -1,3 +1,5 @@
+using NUnit.Framework;
+
 namespace Waypoint.Test.Unit
 {
     [TestFixture]
