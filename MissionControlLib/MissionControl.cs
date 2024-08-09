@@ -3,6 +3,8 @@ using MQTTnet;
 using MQTTnet.Client;
 using System.Diagnostics;
 using System.Text;
+using MissionControlDatabase;
+using MissionControlLib.Exceptions;
 
 namespace MissionControlLib
 {
@@ -19,14 +21,19 @@ namespace MissionControlLib
         private NavMessage? _responseMessage;
         private object _responseLock = new object();
         private bool _isMissionInProgress = false;
+        private DatabaseHandler _dbHandler;
+        private NodeConfig _nodeNameConfig;
 
         #region Public methods
 
-        public void Configure(MqttCommunicationConfig mqttConfig)
+        public void Configure(MqttCommunicationConfig mqttConfig, DatabaseConfig dbConfig, NodeConfig nodeConfig)
         {
             _mqttCommunicationConfig = mqttConfig;
             _mqttFactory = new MqttFactory();
             _mqttClient = _mqttFactory.CreateMqttClient();
+
+            _dbHandler = new DatabaseHandler(dbConfig);
+            _nodeNameConfig = nodeConfig;
 
             _isConfigured = true;
         }
@@ -79,12 +86,14 @@ namespace MissionControlLib
 
         private async Task MonitorMission()
         {
-            while(true)           
+            while (true)
             {
                 if (_isMissionEnded.WaitOne(10))
                 {
                     break;
                 }
+
+                var response = AwaitResponse(CommandsCodeEnum.GET_LOCATION);
             }
         }
 
@@ -141,6 +150,8 @@ namespace MissionControlLib
                 throw new Exception("Wrong command code received in response");
             }
 
+            _dbHandler.InsertMessage((int)_responseMessage.CommandCode, _responseMessage.Payload!.ToArray(), _nodeNameConfig.VesselName);
+
             return _responseMessage;
         }
 
@@ -158,7 +169,14 @@ namespace MissionControlLib
             .WithRetainFlag(false)
             .Build();
 
-            await _mqttClient.PublishAsync(mqttMessage, CancellationToken.None);
+            var result = await _mqttClient.PublishAsync(mqttMessage, CancellationToken.None);
+
+            if (!result.IsSuccess)
+            {
+                throw new Exception("Failed to publish message");
+            }
+
+            _dbHandler.InsertMessage((int)navMessage.CommandCode, navMessage.Payload?.ToArray(), _nodeNameConfig.MissionControlName);
         }
 
         private async Task SubscribeToTopic(string topic)
@@ -196,6 +214,23 @@ namespace MissionControlLib
         #endregion
     }
 
+    #region Structures
+
+    public struct NodeConfig
+    {
+        public string MissionControlName;
+        public string VesselName;
+
+        public NodeConfig(string missionControlName, string vesselName)
+        {
+            MissionControlName = missionControlName;
+            VesselName = vesselName;
+        }
+    }
+
+    #endregion
+
+    #region Enums
     public enum CommandsCodeEnum : byte
     {
         None = 0,
@@ -208,4 +243,6 @@ namespace MissionControlLib
     {
         OK,
     }
+
+    #endregion
 }

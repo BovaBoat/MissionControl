@@ -25,7 +25,7 @@ namespace MissionControlLib.Test.Integration
             var missionControl = new MissionControl();
             var mockCoordinates = new Coordinates(0, 0);
 
-            missionControl.Configure(communicationConfig);
+            missionControl.Configure(communicationConfig, null);
 
             await missionControl.StartMission(mockCoordinates);
 

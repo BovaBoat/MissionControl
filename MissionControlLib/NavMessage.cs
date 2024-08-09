@@ -1,10 +1,7 @@
-﻿using System;
-
-namespace MissionControlLib
+﻿namespace MissionControlLib
 {
     public class NavMessage
     {
-        private const int COMMAND_CODE_INDEX = 0;
         public CommandsCodeEnum CommandCode { get; }
         public List<byte>? Payload { get; }
 

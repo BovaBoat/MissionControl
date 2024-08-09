@@ -1,5 +1,4 @@
-﻿
-namespace MissionControlLib.Waypoints
+﻿namespace MissionControlLib.Exceptions
 {
     public class ErrorResponseException : Exception
     {

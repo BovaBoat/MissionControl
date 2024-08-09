@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using MissionControlLib.Waypoints;
 using MissionControlLib;
+using MissionControlDatabase;
 
 namespace DockControl
 {
@@ -8,6 +9,11 @@ namespace DockControl
     {
         const string BROKER_ADDRESS = "test.mosquitto.org";
         const string TOPIC = "brod/test";
+        const string DB_SERVER_NAME = "LAPTOP-HA1AJVLV";
+        const string DATABASE_NAME = "MissionControl";
+
+        const string MISSION_CONTROL_NODE_NAME = "Andrija MC";
+        const string VESSEL_NODE_NAME = "Andrija Mock Boat";
 
         static async Task Main(string[] args)
         {
@@ -32,18 +38,17 @@ namespace DockControl
                 BoatResponseTopic = dockControlCmdOptions.BoatResponseTopic           
             };
 
-            navigationControl.Configure(communicationConfig);
+            var nodeConfig = new NodeConfig(MISSION_CONTROL_NODE_NAME, VESSEL_NODE_NAME);
+
+            var databaseConfig = new DatabaseConfig(DB_SERVER_NAME, DATABASE_NAME);
+
+            navigationControl.Configure(communicationConfig, databaseConfig, nodeConfig);
 
             await navigationControl.StartCommunication();
 
             await navigationControl.StartMission(destinationCoordinates);
 
             Console.ReadKey();
-        }
-
-        private static void PrintDistanceBetweenWaypoints(Waypoint point1, Waypoint point2)
-        {
-            Console.WriteLine($"Distance between start and destination: {point1.GetDistanceTo(point2)}");
         }
 
         static void HandleParseError(IEnumerable<Error> errs)
