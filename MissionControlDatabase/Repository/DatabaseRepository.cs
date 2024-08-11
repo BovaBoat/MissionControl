@@ -1,12 +1,14 @@
 ﻿using MissionControlDatabase.Models;
+using MissionControl.Shared;
+using MissionControl.Shared.DataTransferObjects;
 
-namespace MissionControlDatabase
+namespace MissionControl.Database.Repository
 {
-    public class DatabaseHandler
+    public class DatabaseRepository
     {
         private MissionControlDbContext _dbContext;
 
-        public DatabaseHandler(DatabaseConfig dbConfig)
+        public DatabaseRepository(DatabaseConfig dbConfig)
         {
             _dbContext = new MissionControlDbContext(dbConfig);
         }
@@ -30,6 +32,11 @@ namespace MissionControlDatabase
 
             _dbContext.Messages.Add(message);
             _dbContext.SaveChanges();
+        }
+
+        public void StoreMessageEventHandler(NavMessage message, string senderName)
+        {
+            InsertMessage((int)message.CommandCode, message.Payload.ToArray(), senderName);
         }
     }
 

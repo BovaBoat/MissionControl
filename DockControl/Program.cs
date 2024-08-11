@@ -1,14 +1,13 @@
 ﻿using CommandLine;
+using MissionControl.Database.Repository;
+using MissionControl.Domain;
+using MissionControlLib.Infrastructure;
 using MissionControlLib.Waypoints;
-using MissionControlLib;
-using MissionControlDatabase;
 
 namespace DockControl
 {
     internal class Program
     {
-        const string BROKER_ADDRESS = "test.mosquitto.org";
-        const string TOPIC = "brod/test";
         const string DB_SERVER_NAME = "LAPTOP-HA1AJVLV";
         const string DATABASE_NAME = "MissionControl";
 
@@ -29,22 +28,26 @@ namespace DockControl
                 .WithParsed(parsedOptions => dockControlCmdOptions = parsedOptions);
 
             var destinationCoordinates = new Coordinates(dockControlCmdOptions.DestinationLatitude, dockControlCmdOptions.DestinationLongitude);
-            var navigationControl = new MissionControl();
+            var navigationControl = new MissionControler();
 
             var communicationConfig = new MqttCommunicationConfig
             {
                 BrokerAddress = dockControlCmdOptions.BrokerAddress,
-                NavControlTopic = dockControlCmdOptions.NavControlTopic,
-                BoatResponseTopic = dockControlCmdOptions.BoatResponseTopic           
+                PublishTopic = dockControlCmdOptions.NavControlTopic,
+                SubscribeTopic = dockControlCmdOptions.BoatResponseTopic           
             };
 
             var nodeConfig = new NodeConfig(MISSION_CONTROL_NODE_NAME, VESSEL_NODE_NAME);
 
             var databaseConfig = new DatabaseConfig(DB_SERVER_NAME, DATABASE_NAME);
 
-            navigationControl.Configure(communicationConfig, databaseConfig, nodeConfig);
+            var dbHandler = new DatabaseRepository(databaseConfig);
 
-            await navigationControl.StartCommunication();
+            navigationControl.MessageSent += dbHandler.StoreMessageEventHandler;
+
+            navigationControl.Configure(communicationConfig, nodeConfig);
+
+            await navigationControl.Connect();
 
             await navigationControl.StartMission(destinationCoordinates);
 

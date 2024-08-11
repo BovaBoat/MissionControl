@@ -1,11 +1,13 @@
-﻿namespace MissionControlLib
+﻿using MissionControl.Shared.Enums;
+
+namespace MissionControl.Shared.DataTransferObjects
 {
     public class NavMessage
     {
-        public CommandsCodeEnum CommandCode { get; }
+        public CommandCodeEnum CommandCode { get; }
         public List<byte>? Payload { get; }
 
-        public NavMessage(CommandsCodeEnum commandCode, List<byte>? payload = null)
+        public NavMessage(CommandCodeEnum commandCode, List<byte>? payload = null)
         {
             if (!IsComandCodeValid(commandCode))
             {
@@ -16,9 +18,9 @@
             Payload = payload;
         }
 
-        private bool IsComandCodeValid(CommandsCodeEnum commandCode)
+        private bool IsComandCodeValid(CommandCodeEnum commandCode)
         {
-            if (!Enum.IsDefined<CommandsCodeEnum>(commandCode))
+            if (!Enum.IsDefined(commandCode))
             {
                 return false;
             }

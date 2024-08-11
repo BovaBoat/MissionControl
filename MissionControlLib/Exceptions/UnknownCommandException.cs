@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MissionControl.Shared.Enums;
 
 namespace MissionControlLib.Exceptions
 {
     internal class UnknownCommandException : Exception
     {
-        CommandsCodeEnum CommandCode { get; }
-        public UnknownCommandException(CommandsCodeEnum commandCode, string message)
+        CommandCodeEnum CommandCode { get; }
+        public UnknownCommandException(CommandCodeEnum commandCode, string message)
             : base(message)
         {
             CommandCode = commandCode;
