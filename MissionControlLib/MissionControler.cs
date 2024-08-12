@@ -8,18 +8,20 @@ namespace MissionControl.Domain
     public class MissionControler
     {
         private bool _isConfigured = false;
+        private bool _isMissionInProgress = true;
         private AutoResetEvent _isMissionEnded = new AutoResetEvent(false);
-        private bool _isMissionInProgress = false;
         private CommHandler _commHandler;
         private NodeConfig _nodeConfig;
 
-        public delegate void MessageSentEventHandler(NavMessage message, string messageSenderName);
-        public event MessageSentEventHandler MessageSent;
+        #region Events
 
-        public void MessageSentHandler(NavMessage message)
-        {
-            MessageSent!.Invoke(message, _nodeConfig.MissionControlName);
-        }
+        public delegate void MessageSentEventHandler(NavMessage message, string messageSenderName);
+        public delegate void MessageReceivedEventHandler(NavMessage message, string messageSenderName);
+
+        public event MessageSentEventHandler MessageSent;
+        public event MessageSentEventHandler MessageReceived;
+
+        #endregion
 
         #region Public methods
 
@@ -97,6 +99,20 @@ namespace MissionControl.Domain
         }
 
         #endregion Private Methods
+
+        #region Event Handlers
+
+        public void MessageSentHandler(NavMessage message)
+        {
+            MessageSent!.Invoke(message, _nodeConfig.MissionControlName);
+        }
+
+        public void MessageReceivedHandler(NavMessage message)
+        {
+            MessageReceived!.Invoke(message, _nodeConfig.VesselName);
+        }
+
+        #endregion
     }
 
     #region Structures

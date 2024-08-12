@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MissionControl.Infrastructure\MissionControl.Infrastructure.csproj" />
     <ProjectReference Include="..\MissionControl.Shared\MissionControl.Shared.csproj" />
   </ItemGroup>
 

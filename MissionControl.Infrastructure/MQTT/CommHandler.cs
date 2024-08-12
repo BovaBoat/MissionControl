@@ -10,18 +10,24 @@ namespace MissionControlLib.Infrastructure
 {
     public class CommHandler
     {
+        #region Constants
+
+        private int RESPONSE_TIMEOUT = 2000;
+
+        #endregion
+
         private IMqttClient? _mqttClient;
         private MqttFactory? _mqttFactory;
         private MqttCommunicationConfig _mqttCommunicationConfig;
-
         private AutoResetEvent _isResponseReceived = new AutoResetEvent(false);
         private object _responseLock = new object();
         private NavMessage? _responseMessage;
 
-        private int RESPONSE_TIMEOUT = 2000;
-
         public delegate void MessageSentEventHandler(NavMessage message);
         public event MessageSentEventHandler MessageSent;
+
+        public delegate void MessageReceivedEventHandler(NavMessage message);
+        public event MessageReceivedEventHandler MessageReceived;
 
         public CommHandler(MqttCommunicationConfig mqttConfig)
         {
@@ -96,6 +102,8 @@ namespace MissionControlLib.Infrastructure
             {
                 throw new Exception("Wrong command code received in response");
             }
+
+            MessageReceived.Invoke(_responseMessage);
 
             return _responseMessage;
         }

@@ -41,6 +41,7 @@ namespace DockControl
             var databaseConfig = new DatabaseConfig(DB_SERVER_NAME, DATABASE_NAME);
             var dbHandler = new DatabaseRepository(databaseConfig);
             navigationControl.MessageSent += dbHandler.StoreMessageEventHandler;
+            navigationControl.MessageReceived += dbHandler.StoreMessageEventHandler;
             navigationControl.Configure(communicationConfig, nodeConfig);
             await navigationControl.Connect();
             await navigationControl.StartMission(destinationCoordinates);
