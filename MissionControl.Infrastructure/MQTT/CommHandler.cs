@@ -2,13 +2,13 @@
 using MQTTnet;
 using System.Text;
 using System.Diagnostics;
-using MissionControlLib.Exceptions;
 using MissionControl.Shared.Enums;
 using MissionControl.Shared.DataTransferObjects;
+using MissionControlLib.Exceptions;
 
 namespace MissionControlLib.Infrastructure
 {
-    internal class CommHandler
+    public class CommHandler
     {
         private IMqttClient? _mqttClient;
         private MqttFactory? _mqttFactory;
@@ -95,11 +95,6 @@ namespace MissionControlLib.Infrastructure
             if (_responseMessage!.CommandCode != commandCode)
             {
                 throw new Exception("Wrong command code received in response");
-            }
-
-            if (!IsErrorResponse((BoatResponseCodeEnum)_responseMessage.Payload[0]))
-            {
-                throw new ErrorResponseException("Error received from boat side");
             }
 
             return _responseMessage;
