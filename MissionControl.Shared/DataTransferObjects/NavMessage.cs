@@ -27,5 +27,18 @@ namespace MissionControl.Shared.DataTransferObjects
 
             return true;
         }
+
+        public List<byte> GetMessageContentByteArray()
+        {
+            var messageContent = new List<byte>();
+            messageContent.Add((byte)CommandCode);
+
+            if (Payload != null)
+            {
+                messageContent.AddRange(Payload);
+            }
+            
+            return messageContent;
+        }
     }
 }

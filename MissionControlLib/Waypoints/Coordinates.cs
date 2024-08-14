@@ -58,10 +58,10 @@
                 throw new ArgumentOutOfRangeException("Invalid length of byte list containing coordinates");
             }
 
-            var lattitudeInBytes = byteList.GetRange(0, 8).ToArray();
-            var longitudeInBytes = byteList.GetRange(8, 8).ToArray();
+            var lattitudeInBytes = byteList.GetRange(0, 4).ToArray();
+            var longitudeInBytes = byteList.GetRange(4, 4).ToArray();
 
-            var coordinates = new Coordinates(BitConverter.ToDouble(lattitudeInBytes, 0), BitConverter.ToDouble(longitudeInBytes, 0));
+            var coordinates = new Coordinates(BitConverter.ToInt32(lattitudeInBytes, 0), BitConverter.ToInt32(longitudeInBytes, 0));
 
             return coordinates;
         }

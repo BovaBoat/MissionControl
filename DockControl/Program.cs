@@ -3,6 +3,7 @@ using MissionControl.Database.Repository;
 using MissionControl.Domain;
 using MissionControlLib.Waypoints;
 using MissionControlLib.Infrastructure;
+using Microsoft.Identity.Client;
 
 namespace DockControl
 {
@@ -40,13 +41,22 @@ namespace DockControl
             var nodeConfig = new NodeConfig(MISSION_CONTROL_NODE_NAME, VESSEL_NODE_NAME);
             var databaseConfig = new DatabaseConfig(DB_SERVER_NAME, DATABASE_NAME);
             var dbHandler = new DatabaseRepository(databaseConfig);
-            navigationControl.MessageSent += dbHandler.StoreMessageEventHandler;
-            navigationControl.MessageReceived += dbHandler.StoreMessageEventHandler;
+            //navigationControl.MessageSent += dbHandler.StoreMessageEventHandler;
+            //navigationControl.MessageReceived += dbHandler.StoreMessageEventHandler;
+            
             navigationControl.Configure(communicationConfig, nodeConfig);
             await navigationControl.Connect();
             await navigationControl.StartMission(destinationCoordinates);
 
+            navigationControl.LocationUpdateReceived += PrintLatestLocation;
+            await navigationControl.PeriodicReportLocationCommand();
+
             Console.ReadKey();
+        }
+
+        public static void PrintLatestLocation(Coordinates latestLocationCoordinates)
+        {
+            Console.WriteLine($"Latitude: {latestLocationCoordinates.GetLatitude()}, Longitude: {latestLocationCoordinates.GetLongitude()}");
         }
 
         static void HandleParseError(IEnumerable<Error> errs)
