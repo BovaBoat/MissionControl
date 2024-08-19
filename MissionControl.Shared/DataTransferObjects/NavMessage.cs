@@ -28,7 +28,7 @@ namespace MissionControl.Shared.DataTransferObjects
             return true;
         }
 
-        public List<byte> GetMessageContentByteArray()
+        public List<byte> GetMessageContentBytes()
         {
             var messageContent = new List<byte>();
             messageContent.Add((byte)CommandCode);

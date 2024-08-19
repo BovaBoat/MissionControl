@@ -1,28 +1,23 @@
 ﻿using MQTTnet.Client;
 using MQTTnet;
-using System.Text;
-using System.Diagnostics;
-using MissionControl.Shared.Enums;
-using MissionControl.Shared.DataTransferObjects;
-using MissionControlLib.Exceptions;
+using MissionControl.Infrastructure.MQTT.Exceptions;
 
 namespace MissionControlLib.Infrastructure
 {
-    public class CommHandler
+    public class MqttCommHandler
     {
-
         private IMqttClient? _mqttClient;
         private MqttFactory? _mqttFactory;
         private MqttCommunicationConfig _mqttCommunicationConfig;
         private object _responseLock = new object();
 
-        public delegate void MessageSentEventHandler(NavMessage message);
-        public event MessageSentEventHandler MessageSent;
+        public delegate void MessageSentEventHandler(List<byte> messagePayload);
+        public event MessageSentEventHandler? MessageSent;
 
-        public delegate void MessageReceivedEventHandler(NavMessage message);
-        public event MessageReceivedEventHandler MessageReceived;
+        public delegate void MessageReceivedEventHandler(List<byte> messagePayload);
+        public event MessageReceivedEventHandler? MessageReceived;
 
-        public CommHandler(MqttCommunicationConfig mqttConfig)
+        public MqttCommHandler(MqttCommunicationConfig mqttConfig)
         {
             _mqttCommunicationConfig = mqttConfig;
             _mqttFactory = new MqttFactory();
@@ -50,29 +45,22 @@ namespace MissionControlLib.Infrastructure
             await _mqttClient!.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
         }
 
-        public async Task<bool> SendMessage(NavMessage navMessage)
+        public async Task SendMessage(List<byte> payload)
         {
             var mqttMessage = new MqttApplicationMessageBuilder()
             .WithTopic(_mqttCommunicationConfig.PublishTopic)
-            .WithPayload(navMessage.GetMessageContentByteArray())
+            .WithPayload(payload)
             .WithRetainFlag(false)
             .Build();
 
-            var result = await _mqttClient.PublishAsync(mqttMessage, CancellationToken.None);
+            var result = await _mqttClient!.PublishAsync(mqttMessage, CancellationToken.None);
 
             if (!result.IsSuccess)
             {
-                return false;
+                throw new FailedToPublishMessageException("Error occured while publishing message.", payload);
             }
 
-            MessageSent?.Invoke(navMessage);
-
-            return true;
-        }
-
-        private bool IsErrorResponse(BoatResponseCodeEnum reponse)
-        {
-            return reponse == BoatResponseCodeEnum.OK;
+            MessageSent?.Invoke(payload);
         }
 
         #region Event handlers
@@ -81,16 +69,9 @@ namespace MissionControlLib.Infrastructure
         {
             lock (_responseLock)
             {
-                Trace.WriteLine("Received application message.");
-                var payloadString = Encoding.Default.GetString(e.ApplicationMessage.PayloadSegment);
-                var payloadBytesList = Encoding.ASCII.GetBytes(payloadString).ToList();
+                var payload = e.ApplicationMessage.PayloadSegment.ToList<byte>();
 
-                var commandByte = payloadBytesList[0];
-                var responseMessage = new NavMessage((CommandCodeEnum)commandByte, payloadBytesList.GetRange(1, payloadBytesList.Count - 1));
-
-                //_isResponseReceived.Set();
-
-                MessageReceived.Invoke(responseMessage);
+                MessageReceived?.Invoke(payload);
             }
         }        
 

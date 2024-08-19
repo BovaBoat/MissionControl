@@ -44,13 +44,20 @@ namespace DockControl
             //navigationControl.MessageSent += dbHandler.StoreMessageEventHandler;
             //navigationControl.MessageReceived += dbHandler.StoreMessageEventHandler;
             
-            navigationControl.Configure(communicationConfig, nodeConfig);
-            await navigationControl.Connect();
-            await navigationControl.StartMission(destinationCoordinates);
+            try
+            {
+                navigationControl.Configure(communicationConfig, nodeConfig);
+                await navigationControl.Connect();
+                await navigationControl.StartMission(destinationCoordinates);
 
-            navigationControl.LocationUpdateReceived += PrintLatestLocation;
-            await navigationControl.PeriodicReportLocationCommand();
-
+                navigationControl.LocationUpdateReceived += PrintLatestLocation;
+                await navigationControl.PeriodicReportLocationCommand();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+           
             Console.ReadKey();
         }
 

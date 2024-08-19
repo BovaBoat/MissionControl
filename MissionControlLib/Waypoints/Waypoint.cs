@@ -6,18 +6,11 @@
 
         public Coordinates Coordinates { get; }
 
-        private readonly WaypointType _type;
-
         public Waypoint(Coordinates waypointCoordinates, WaypointType? waypointType)
         {
             if (!WaypointValidator.AreWaypointCoordinatesValid(waypointCoordinates.GetLatitude(), waypointCoordinates.GetLongitude()))
             {
                 throw new InvalidWaypointCoordinatesException(waypointCoordinates.GetLatitude(), waypointCoordinates.GetLongitude(), "Invalid coordinates specified");
-            }
-
-            if (waypointType == null)
-            {
-                _type = WaypointType.Standard;
             }
 
             Coordinates = waypointCoordinates;

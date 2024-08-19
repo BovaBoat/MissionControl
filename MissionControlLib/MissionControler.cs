@@ -18,7 +18,7 @@ namespace MissionControl.Domain
         private bool _isConfigured = false;
         public bool IsMissionInProgress = false;
         private AutoResetEvent _isMissionEnded = new AutoResetEvent(false);
-        private CommHandler _commHandler;
+        private MqttCommHandler _commHandler;
         private NodeConfig _nodeConfig;
         private CommandCodeEnum _expectedResponseCmdCode;
         private AutoResetEvent _isResponseReceived = new AutoResetEvent(false);
@@ -31,10 +31,9 @@ namespace MissionControl.Domain
         public delegate void MessageReceivedEventHandler(NavMessage message, string messageSenderName);
         public delegate void LocationUpdateRxEvenetHandler(Coordinates locationCoordinates);
 
-        public event MessageSentEventHandler MessageSent;
-        public event MessageReceivedEventHandler MessageReceived;
-
-        public event LocationUpdateRxEvenetHandler LocationUpdateReceived;
+        public event MessageSentEventHandler? MessageSent;
+        public event MessageReceivedEventHandler? MessageReceived;
+        public event LocationUpdateRxEvenetHandler? LocationUpdateReceived;
 
         #endregion
 
@@ -42,7 +41,7 @@ namespace MissionControl.Domain
 
         public void Configure(MqttCommunicationConfig mqttConfig, NodeConfig nodeConfig)
         {
-            _commHandler = new CommHandler(mqttConfig);
+            _commHandler = new MqttCommHandler(mqttConfig);
             _nodeConfig = nodeConfig;
             _isConfigured = true;
         }
@@ -82,7 +81,7 @@ namespace MissionControl.Domain
                 throw new Exception("Wrong command code received in response");
             }
 
-            //MessageReceived.Invoke(_responseMessage, _nodeConfig.VesselName);
+            MessageReceived?.Invoke(_responseMessage, _nodeConfig.VesselName);
 
             return _responseMessage;
         }
@@ -142,9 +141,9 @@ namespace MissionControl.Domain
 
         private async Task SendCommand(NavMessage navMessage, bool isResponseExpected = false)
         {
-            var result = await _commHandler.SendMessage(navMessage);
+            await _commHandler.SendMessage(navMessage.GetMessageContentBytes());
 
-            if (result && isResponseExpected)
+            if (isResponseExpected)
             {
                 _isExpectingResponse = true;
                 _expectedResponseCmdCode = navMessage.CommandCode;
@@ -155,28 +154,29 @@ namespace MissionControl.Domain
 
         #region Event Handlers
 
-        public void MessageSentHandler(NavMessage message)
+        public void MessageSentHandler(List<byte> messageContent)
         {
-            MessageSent?.Invoke(message, _nodeConfig.MissionControlName);
+            var navMessage = new NavMessage((CommandCodeEnum)messageContent[0], messageContent);
+            MessageSent?.Invoke(navMessage, _nodeConfig.MissionControlName);
         }
 
-        public void MessageReceivedHandler(NavMessage message)
+        public void MessageReceivedHandler(List<byte> messageContent)
         {
-            Console.WriteLine(message.CommandCode);
-            if (message.CommandCode == CommandCodeEnum.GET_LOCATION)
+            var navMessage = new NavMessage((CommandCodeEnum)messageContent[0], messageContent);
+            if (navMessage.CommandCode == CommandCodeEnum.GET_LOCATION)
             {
-                var coordinates = Coordinates.FromByteList(message.Payload.ToList<byte>());
-                LocationUpdateReceived.Invoke(coordinates);
+                var coordinates = Coordinates.FromByteList(navMessage.Payload.GetRange(1,8));
+                LocationUpdateReceived?.Invoke(coordinates);
             }
 
-            if (_isExpectingResponse && message.CommandCode == _expectedResponseCmdCode)
+            if (_isExpectingResponse && navMessage.CommandCode == _expectedResponseCmdCode)
             {
                 _isExpectingResponse = false;
-                _responseMessage = message;
+                _responseMessage = navMessage;
                 _isResponseReceived.Set();
             }
 
-            //MessageReceived?.Invoke(message, _nodeConfig.VesselName);
+            MessageReceived?.Invoke(navMessage, _nodeConfig.VesselName);
         }
 
         #endregion
