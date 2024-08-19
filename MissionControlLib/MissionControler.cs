@@ -169,6 +169,11 @@ namespace MissionControl.Domain
                 LocationUpdateReceived?.Invoke(coordinates);
             }
 
+            if (IsMissionInProgress && navMessage.CommandCode == CommandCodeEnum.MISSION_END)
+            {
+                IsMissionInProgress = false;
+            }
+
             if (_isExpectingResponse && navMessage.CommandCode == _expectedResponseCmdCode)
             {
                 _isExpectingResponse = false;

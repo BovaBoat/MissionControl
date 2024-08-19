@@ -20,5 +20,17 @@ namespace DockControl
         [Option("boat", Required = true)]
         public string BoatResponseTopic { get; set; }
 
+        [Option("dbServer", Required = false)]
+        public string DatabaseServerName { get; set; }
+
+        [Option("dbName", Required = false)]
+        public string DatabaseName { get; set; }
+
+        [Option("mcName", Required = false)]
+        public string MissionControlNodeName { get; set; }
+
+        [Option("vesselName", Required = false)]
+        public string VesselName { get; set; }
+
     }
 }

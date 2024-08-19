@@ -9,11 +9,11 @@ namespace DockControl
 {
     internal class Program
     {
-        const string DB_SERVER_NAME = "LAPTOP-HA1AJVLV";
-        const string DATABASE_NAME = "MissionControl";
+        //const string DB_SERVER_NAME = "LAPTOP-HA1AJVLV";
+        //const string DATABASE_NAME = "MissionControl";
 
-        const string MISSION_CONTROL_NODE_NAME = "Andrija MC";
-        const string VESSEL_NODE_NAME = "Andrija Mock Boat";
+        //const string MISSION_CONTROL_NODE_NAME = "Andrija MC";
+        //const string VESSEL_NODE_NAME = "Andrija Mock Boat";
 
         static async Task Main(string[] args)
         {
@@ -38,8 +38,8 @@ namespace DockControl
                 SubscribeTopic = dockControlCmdOptions.BoatResponseTopic           
             };
 
-            var nodeConfig = new NodeConfig(MISSION_CONTROL_NODE_NAME, VESSEL_NODE_NAME);
-            var databaseConfig = new DatabaseConfig(DB_SERVER_NAME, DATABASE_NAME);
+            var nodeConfig = new NodeConfig(dockControlCmdOptions.MissionControlNodeName, dockControlCmdOptions.VesselName);
+            var databaseConfig = new DatabaseConfig(dockControlCmdOptions.DatabaseName, dockControlCmdOptions.DatabaseServerName);
             var dbHandler = new DatabaseRepository(databaseConfig);
             //navigationControl.MessageSent += dbHandler.StoreMessageEventHandler;
             //navigationControl.MessageReceived += dbHandler.StoreMessageEventHandler;
