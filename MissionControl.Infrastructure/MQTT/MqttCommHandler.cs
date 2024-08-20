@@ -1,6 +1,6 @@
 ﻿using MQTTnet.Client;
 using MQTTnet;
-using MissionControl.Infrastructure.MQTT.Exceptions;
+using MissionControl.Infrastructure.Exceptions;
 
 namespace MissionControlLib.Infrastructure
 {
