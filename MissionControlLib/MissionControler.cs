@@ -15,25 +15,16 @@ namespace MissionControl.Domain
 
         #endregion
 
-        private bool _isConfigured = false;
-        public bool IsMissionInProgress = false;
-        private AutoResetEvent _isMissionEnded = new AutoResetEvent(false);
+        #region Fields
+
         private MqttCommHandler _commHandler;
         private NodeConfig _nodeConfig;
         private CommandCodeEnum _expectedResponseCmdCode;
         private AutoResetEvent _isResponseReceived = new AutoResetEvent(false);
         private bool _isExpectingResponse = false;
-        private NavMessage _responseMessage; 
-
-        #region Events
-
-        public delegate void MessageSentEventHandler(NavMessage message, string messageSenderName);
-        public delegate void MessageReceivedEventHandler(NavMessage message, string messageSenderName);
-        public delegate void LocationUpdateRxEvenetHandler(Coordinates locationCoordinates);
-
-        public event MessageSentEventHandler? MessageSent;
-        public event MessageReceivedEventHandler? MessageReceived;
-        public event LocationUpdateRxEvenetHandler? LocationUpdateReceived;
+        private NavMessage _responseMessage;
+        private bool _isConfigured = false;
+        private bool _isMissionInProgress = false;
 
         #endregion
 
@@ -99,7 +90,7 @@ namespace MissionControl.Domain
             await MissionStartConfirmationCommand();
             response = await AwaitResponse(CommandCodeEnum.GREEN_LIGTH);
 
-            IsMissionInProgress = true;
+            _isMissionInProgress = true;
         }
 
         #endregion Public Methods
@@ -169,9 +160,9 @@ namespace MissionControl.Domain
                 LocationUpdateReceived?.Invoke(coordinates);
             }
 
-            if (IsMissionInProgress && navMessage.CommandCode == CommandCodeEnum.MISSION_END)
+            if (_isMissionInProgress && navMessage.CommandCode == CommandCodeEnum.MISSION_END)
             {
-                IsMissionInProgress = false;
+                _isMissionInProgress = false;
             }
 
             if (_isExpectingResponse && navMessage.CommandCode == _expectedResponseCmdCode)
@@ -183,6 +174,18 @@ namespace MissionControl.Domain
 
             MessageReceived?.Invoke(navMessage, _nodeConfig.VesselName);
         }
+
+        #endregion
+
+        #region Events
+
+        public delegate void MessageSentEventHandler(NavMessage message, string messageSenderName);
+        public delegate void MessageReceivedEventHandler(NavMessage message, string messageSenderName);
+        public delegate void LocationUpdateRxEvenetHandler(Coordinates locationCoordinates);
+
+        public event MessageSentEventHandler? MessageSent;
+        public event MessageReceivedEventHandler? MessageReceived;
+        public event LocationUpdateRxEvenetHandler? LocationUpdateReceived;
 
         #endregion
     }
