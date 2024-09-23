@@ -1,0 +1,31 @@
+﻿@page "/Config"
+@inject MissionControl.WebApp.Services.ConfigDataService ConfigData
+
+<h3>Config</h3>
+
+<div class="status-square">
+    @GetStatusText()
+</div>
+
+<div>
+    <EditForm Model="@ConfigData" OnValidSubmit="ConfigData.Configure">
+        <div class="mb-3">
+            <label for="vesselName" class="form-label">Vessel Name</label>
+            <InputText id="vesselName" class="form-control" @bind-Value="ConfigData.VesselName" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>
+
+    @if (!string.IsNullOrEmpty(ConfigData.VesselName))
+    {
+        <p>You entered: @ConfigData.VesselName</p>
+    }
+</div>
+
+@code {
+    private string GetStatusText()
+    {
+        return ConfigData.IsConfigured ? "Configured" : "Not Configured";
+    }
+}

@@ -1,0 +1,11 @@
+﻿.status-square {
+    width: 100px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-weight: bold;
+    background-color: red; /* Default color */
+    border-radius: 4px;
+}

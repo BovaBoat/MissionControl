@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MissionControl.Database", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MissionControl.Shared", "MissionControl.Shared\MissionControl.Shared.csproj", "{B9D7F8F5-F3F7-4FD2-A939-D95B0FBC5EE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MissionControl.Infrastructure", "MissionControl.Infrastructure\MissionControl.Infrastructure.csproj", "{7FC0B9A0-BFDB-466D-A68B-B077ED1C5794}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MissionControl.Infrastructure", "MissionControl.Infrastructure\MissionControl.Infrastructure.csproj", "{7FC0B9A0-BFDB-466D-A68B-B077ED1C5794}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MissionControl.WebApp", "MissionControl.WebApp\MissionControl.WebApp.csproj", "{66ADF5D2-8642-4DCE-85D2-75E9129CC32C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{7FC0B9A0-BFDB-466D-A68B-B077ED1C5794}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FC0B9A0-BFDB-466D-A68B-B077ED1C5794}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FC0B9A0-BFDB-466D-A68B-B077ED1C5794}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66ADF5D2-8642-4DCE-85D2-75E9129CC32C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66ADF5D2-8642-4DCE-85D2-75E9129CC32C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66ADF5D2-8642-4DCE-85D2-75E9129CC32C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66ADF5D2-8642-4DCE-85D2-75E9129CC32C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
