@@ -1,4 +1,4 @@
-﻿namespace MissionControlLib.Infrastructure
+﻿namespace MissionControl.Infrastructure
 {
     public struct MqttCommunicationConfig
     {
@@ -19,6 +19,19 @@
             BrokerAddress = brokerAddress;
             PublishTopic = publishTopic;
             SubscribeTopic = subscribeTopic;
+        }
+
+    }
+
+    public struct NodeConfig
+    {
+        public string MissionControlName;
+        public string VesselName;
+
+        public NodeConfig(string missionControlName, string vesselName)
+        {
+            MissionControlName = missionControlName;
+            VesselName = vesselName;
         }
     }
 }

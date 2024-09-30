@@ -1,9 +1,9 @@
 ﻿using MissionControlLib.Waypoints;
-using MissionControlLib.Infrastructure;
 using MissionControl.Shared.Enums;
 using MissionControl.Shared.DataTransferObjects;
 using System.Diagnostics;
 using MissionControlLib.Exceptions;
+using MissionControl.Infrastructure;
 
 namespace MissionControl.Domain
 {
@@ -50,7 +50,7 @@ namespace MissionControl.Domain
             await _commHandler.ConnectToBrokerAndSubscribe();
         }
 
-        public async Task<NavMessage> AwaitResponse(CommandCodeEnum commandCode)
+        public NavMessage AwaitResponse(CommandCodeEnum commandCode)
         {
             var timeoutStopwatch = Stopwatch.StartNew();
 
@@ -85,10 +85,10 @@ namespace MissionControl.Domain
             }
 
             await StartMissionCommand(destinationCoordinates);
-            var response = await AwaitResponse(CommandCodeEnum.START_MISSION);
+            var response = AwaitResponse(CommandCodeEnum.START_MISSION);
 
             await MissionStartConfirmationCommand();
-            response = await AwaitResponse(CommandCodeEnum.GREEN_LIGTH);
+            response = AwaitResponse(CommandCodeEnum.GREEN_LIGTH);
 
             _isMissionInProgress = true;
         }
@@ -106,7 +106,7 @@ namespace MissionControl.Domain
 
             await SendCommand(message, isResponseExpected: true);
 
-            var response = await AwaitResponse(CommandCodeEnum.PERIODIC_REPORT_LOCATION);
+            var response = AwaitResponse(CommandCodeEnum.PERIODIC_REPORT_LOCATION);
         }
 
         private Coordinates LocationReceived(List<byte> coordinatesInBytes)
@@ -191,18 +191,6 @@ namespace MissionControl.Domain
     }
 
     #region Structures
-
-    public struct NodeConfig
-    {
-        public string MissionControlName;
-        public string VesselName;
-
-        public NodeConfig(string missionControlName, string vesselName)
-        {
-            MissionControlName = missionControlName;
-            VesselName = vesselName;
-        }
-    }
 
     #endregion
 }

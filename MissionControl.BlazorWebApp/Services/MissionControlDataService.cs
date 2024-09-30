@@ -1,7 +1,11 @@
-﻿namespace MissionControl.WebApp.Services
+﻿using MissionControl.Infrastructure;
+
+namespace MissionControl.BlazorWebApp.Services
 {
     public class MissionControlDataService
     {
+
+        MqttCommunicationConfig mqttConfig;
         public double Latitude { get; set; }
         public double Longitude { get; set; }
 

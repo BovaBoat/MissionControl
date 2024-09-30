@@ -1,8 +1,9 @@
 ﻿using MQTTnet.Client;
 using MQTTnet;
 using MissionControl.Infrastructure.Exceptions;
+using MQTTnet.Server;
 
-namespace MissionControlLib.Infrastructure
+namespace MissionControl.Infrastructure
 {
     public class MqttCommHandler
     {
@@ -26,9 +27,15 @@ namespace MissionControlLib.Infrastructure
 
         public async Task ConnectToBrokerAndSubscribe()
         {
-            var mqttClientOptions = new MqttClientOptionsBuilder().WithTcpServer(_mqttCommunicationConfig.BrokerAddress).Build();
+            var mqttClientOptions = new MqttClientOptionsBuilder().WithWebSocketServer(_mqttCommunicationConfig.BrokerAddress).Build();
             _mqttClient!.ApplicationMessageReceivedAsync += OnApplicationMessageReceivedAsync;
-            await _mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
+            var result = await _mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
+
+            if (result.ResultCode != MqttClientConnectResultCode.Success)
+            {
+                throw new Exception("Failed to connect");
+            }
+
             await SubscribeToTopic(_mqttCommunicationConfig.SubscribeTopic);
         }
 
@@ -42,7 +49,12 @@ namespace MissionControlLib.Infrastructure
                     })
                 .Build();
 
-            await _mqttClient!.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
+            var result = await _mqttClient!.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
+
+            if (result.Items.Any(item => item.ResultCode != MqttClientSubscribeResultCode.GrantedQoS0))
+            {
+                throw new Exception($"Failed to subscribe to topic {topic}");
+            }
         }
 
         public async Task SendMessage(List<byte> payload)
@@ -67,12 +79,10 @@ namespace MissionControlLib.Infrastructure
 
         private async Task OnApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs e)
         {
-            lock (_responseLock)
-            {
+
                 var payload = e.ApplicationMessage.PayloadSegment.ToList<byte>();
 
                 MessageReceived?.Invoke(payload);
-            }
         }        
 
         #endregion

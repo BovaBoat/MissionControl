@@ -1,0 +1,53 @@
+﻿@page "/Config"
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@rendermode InteractiveServer
+@inject MissionControl.BlazorWebApp.Services.ConfigDataService ConfigData
+
+<h3>Config</h3>
+
+<div class="status-square">
+    @GetStatusText()
+</div>
+
+<div>
+    <EditForm Model="@ConfigData" OnValidSubmit="ConfigData.Configure">
+        <div class="mb-3">
+            <label for="vesselName" class="form-label">Vessel Name</label>
+            <InputText id="vesselName" class="form-control" @bind-Value="ConfigData.VesselName" />
+        </div>
+
+        <div class="mb-3">
+            <label for="BrokerAddress" class="form-label">Broker Name</label>
+            <InputText id="BrokerAddress" class="form-control" @bind-Value="ConfigData.BrokerAddress" />
+        </div>
+
+        <div class="mb-3">
+            <label for="PublishTopic" class="form-label">Publish Topic</label>
+            <InputText id="PublishTopic" class="form-control" @bind-Value="ConfigData.PublishTopic" />
+        </div>
+
+        <div class="mb-3">
+            <label for="SubscribeTopic" class="form-label">Subscribe Topic</label>
+            <InputText id="SubscribeTopic" class="form-control" @bind-Value="ConfigData.SubscribeTopic" />
+        </div>
+
+        <div class="mb-3">
+            <label for="MissionControlName" class="form-label">Mission Control Name</label>
+            <InputText id="MissionControlName" class="form-control" @bind-Value="ConfigData.MissionControlName" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </EditForm>
+
+    @if (!string.IsNullOrEmpty(ConfigData.VesselName))
+    {
+        <p>You entered: @ConfigData.VesselName</p>
+    }
+</div>
+
+@code {
+    private string GetStatusText()
+    {
+        return ConfigData.IsConfigured ? "Configured" : "Not Configured";
+    }
+}

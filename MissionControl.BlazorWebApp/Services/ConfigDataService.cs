@@ -1,10 +1,13 @@
-﻿namespace MissionControl.WebApp.Services
+﻿namespace MissionControl.BlazorWebApp.Services
 {
     public class ConfigDataService
     {
         public bool IsConfigured { get; set; } = false;
         public string VesselName { get; set; } = "";
-        public string MqttTopic { get; set; } = "";
+        public string BrokerAddress { get; set; } = "";
+        public string PublishTopic { get; set; } = "";
+        public string SubscribeTopic { get; set; } = "";
+        public string MissionControlName { get; set; } = "";
 
         public void Configure()
         {
@@ -12,12 +15,8 @@
             {
                 IsConfigured = false;
 
-                MqttTopic = string.Empty;
-
                 return;
             }
-
-            MqttTopic = $"brod/{VesselName}";
 
             IsConfigured = true;
         }

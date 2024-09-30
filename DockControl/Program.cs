@@ -2,8 +2,7 @@
 using MissionControl.Database.Repository;
 using MissionControl.Domain;
 using MissionControlLib.Waypoints;
-using MissionControlLib.Infrastructure;
-using Microsoft.Identity.Client;
+using MissionControl.Infrastructure;
 
 namespace DockControl
 {
