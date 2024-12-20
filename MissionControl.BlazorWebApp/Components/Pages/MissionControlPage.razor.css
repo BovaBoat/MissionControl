@@ -9,3 +9,11 @@
     background-color: red; /* Default color */
     border-radius: 4px;
 }
+
+.log-list {
+    border: 2px solid black; /* Adds a black border */
+    padding: 10px; /* Adds some padding inside the border */
+    margin-top: 20px; /* Adds some margin above the list */
+    border-radius: 5px; /* Rounds the corners slightly */
+    list-style-type: none; /* Removes the bullet points */
+}

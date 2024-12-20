@@ -1,9 +1,13 @@
 ﻿@page "/missionControlPage"
-@inject MissionControl.BlazorWebApp.Services.ConfigDataService ConfigData
-@inject MissionControl.BlazorWebApp.Services.MissionControlDataService MissionControlData
+
 @using MissionControl.Domain
 @using MissionControl.Infrastructure
+
 @rendermode InteractiveServer
+
+@inject MissionControl.BlazorWebApp.Services.ConfigDataService ConfigData
+@inject MissionControl.BlazorWebApp.Services.MissionControlDataService MissionControlData
+@inject MissionControl.BlazorWebApp.Services.ActionLoggerService ActionLogger
 
 <h3>MissionControl</h3>
 
@@ -23,13 +27,25 @@
         <input @bind="longitudeString" type="text" id="longitude" name="longitude" placeholder="Enter longitude" required>
 
         <button type="submit" onsubmit="OnMissionControlDataSubmit">Submit</button>
+        <button type="button" class="btn btn-primary mt-3" @onclick="Search">Search Flights</button>
     </form>
 </div>
 
 <button class="btn btn-success" @onclick="StartMission">Start Mission</button>
 
+<ul class="log-list">
+    @foreach (var log in ActionLogger.Logs)
+    {
+        <li>@log</li>
+    }
+</ul>
+
 @code
 {
+    public void Search()
+    {
+        
+    }
     private string latitudeString = "";
     private string longitudeString = "";
 
@@ -53,13 +69,38 @@
         {
             missionControler.Configure(communicationConfig, nodeConfig);
             await missionControler.Connect();
+            LogAndRenderUI("Connected to broker", LogEntryType.INFO);
             var destinationCoordinates = new MissionControlLib.Waypoints.Coordinates(MissionControlData.Latitude, MissionControlData.Longitude);
             await missionControler.StartMission(destinationCoordinates);
-            Console.ReadKey();
+            LogAndRenderUI("Mission Started", LogEntryType.INFO);
         }
-        catch
+        catch(Exception e)
         {
-
+            LogAndRenderUI(e.Message, LogEntryType.ERROR);
         }   
+    }
+
+    enum LogEntryType
+    {
+        INFO,
+        ERROR
+    }
+
+    private void LogAndRenderUI(string logMessage, LogEntryType type)
+    {
+        if (type == LogEntryType.INFO)
+            ActionLogger.Log.Info(logMessage);
+
+        switch (type)
+        {
+            case LogEntryType.INFO:
+                ActionLogger.Log.Info(logMessage);
+                break;
+            case LogEntryType.ERROR:
+                ActionLogger.Log.Error(logMessage);  // Replace with desired action
+                break;
+        }
+
+        StateHasChanged();
     }
 }

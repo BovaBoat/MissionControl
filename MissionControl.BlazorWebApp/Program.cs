@@ -1,5 +1,8 @@
+using log4net;
+using log4net.Config;
 using MissionControl.BlazorWebApp.Components;
 using MissionControl.BlazorWebApp.Services;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,10 @@ builder.Services.AddRazorComponents()
 builder.Services.AddSingleton<ConfigDataService>();
 builder.Services.AddScoped<MissionControlDataService>();
 builder.Services.AddScoped<MissionControl.Domain.MissionControler>();
+builder.Services.AddScoped<ActionLoggerService>();
+
+var logRepository = LogManager.GetRepository(System.Reflection.Assembly.GetEntryAssembly());
+XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
 
 var app = builder.Build();
 

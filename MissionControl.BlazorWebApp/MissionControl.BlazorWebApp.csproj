@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="log4net" Version="3.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MissionControl.Infrastructure\MissionControl.Infrastructure.csproj" />
     <ProjectReference Include="..\MissionControlLib\MissionControl.Domain.csproj" />
   </ItemGroup>
