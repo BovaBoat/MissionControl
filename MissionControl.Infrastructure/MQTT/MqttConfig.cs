@@ -1,12 +1,12 @@
 ﻿namespace MissionControl.Infrastructure
 {
-    public struct MqttCommunicationConfig
+    public class MqttConfig
     {
-        public string BrokerAddress;
-        public string PublishTopic;
-        public string SubscribeTopic;
+        public string BrokerAddress { get; }
+        public string PublishTopic { get; }
+        public string SubscribeTopic { get; }
 
-        public MqttCommunicationConfig(string brokerAddress, string publishTopic, string subscribeTopic)
+        public MqttConfig(string brokerAddress, string publishTopic, string subscribeTopic)
         {
 
             if (string.IsNullOrEmpty(brokerAddress)
@@ -23,10 +23,10 @@
 
     }
 
-    public struct NodeConfig
+    public class NodeConfig
     {
-        public string MissionControlName;
-        public string VesselName;
+        public string MissionControlName { get; }
+        public string VesselName { get; }
 
         public NodeConfig(string missionControlName, string vesselName)
         {

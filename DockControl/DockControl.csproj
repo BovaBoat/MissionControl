@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MissionControl.Application\MissionControl.Application.csproj" />
     <ProjectReference Include="..\MissionControl.Infrastructure\MissionControl.Infrastructure.csproj" />
     <ProjectReference Include="..\MissionControlDatabase\MissionControl.Database.csproj" />
     <ProjectReference Include="..\MissionControlLib\MissionControl.Domain.csproj" />

@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 using MissionControl.Database.Repository;
-using MissionControl.Domain;
+using MissionControl.Application;
 using MissionControlLib.Waypoints;
 using MissionControl.Infrastructure;
 
@@ -30,7 +30,7 @@ namespace DockControl
             var destinationCoordinates = new Coordinates(dockControlCmdOptions.DestinationLatitude, dockControlCmdOptions.DestinationLongitude);
             var navigationControl = new MissionControler();
 
-            var communicationConfig = new MqttCommunicationConfig
+            var communicationConfig = new MqttConfig
             {
                 BrokerAddress = dockControlCmdOptions.BrokerAddress,
                 PublishTopic = dockControlCmdOptions.NavControlTopic,
@@ -45,7 +45,7 @@ namespace DockControl
             
             try
             {
-                navigationControl.Configure(communicationConfig, nodeConfig);
+                //navigationControl.Configure(communicationConfig, nodeConfig);
                 await navigationControl.Connect();
                 await navigationControl.StartMission(destinationCoordinates);
 

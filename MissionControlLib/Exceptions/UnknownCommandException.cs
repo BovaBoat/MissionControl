@@ -1,6 +1,6 @@
 ﻿using MissionControl.Shared.Enums;
 
-namespace MissionControlLib.Exceptions
+namespace MissionControl.Domain.Exceptions
 {
     internal class UnknownCommandException : Exception
     {

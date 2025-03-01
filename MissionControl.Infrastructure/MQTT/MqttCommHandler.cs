@@ -9,7 +9,7 @@ namespace MissionControl.Infrastructure
     {
         private IMqttClient? _mqttClient;
         private MqttFactory? _mqttFactory;
-        private MqttCommunicationConfig _mqttCommunicationConfig;
+        private MqttConfig _mqttCommunicationConfig;
         private object _responseLock = new object();
 
         public delegate void MessageSentEventHandler(List<byte> messagePayload);
@@ -18,7 +18,7 @@ namespace MissionControl.Infrastructure
         public delegate void MessageReceivedEventHandler(List<byte> messagePayload);
         public event MessageReceivedEventHandler? MessageReceived;
 
-        public MqttCommHandler(MqttCommunicationConfig mqttConfig)
+        public MqttCommHandler(MqttConfig mqttConfig)
         {
             _mqttCommunicationConfig = mqttConfig;
             _mqttFactory = new MqttFactory();

@@ -3,6 +3,7 @@
 @inject MissionControl.BlazorWebApp.Services.MissionControlDataService MissionControlData
 @using MissionControl.Domain
 @using MissionControl.Infrastructure
+@using MissionControl.Application
 @rendermode InteractiveServer
 
 <h3>MissionControl</h3>
@@ -46,12 +47,12 @@
     private async Task StartMission()
     {
         var missionControler = new MissionControler();
-        var communicationConfig = new MqttCommunicationConfig(ConfigData.BrokerAddress, ConfigData.PublishTopic, ConfigData.SubscribeTopic);
+        var communicationConfig = new MqttConfig(ConfigData.BrokerAddress, ConfigData.PublishTopic, ConfigData.SubscribeTopic);
         var nodeConfig = new NodeConfig(ConfigData.VesselName, ConfigData.MissionControlName);
 
         try
         {
-            missionControler.Configure(communicationConfig, nodeConfig);
+            //missionControler.Configure(communicationConfig, nodeConfig);
             await missionControler.Connect();
             var destinationCoordinates = new MissionControlLib.Waypoints.Coordinates(MissionControlData.Latitude, MissionControlData.Longitude);
             await missionControler.StartMission(destinationCoordinates);

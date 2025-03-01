@@ -2,10 +2,10 @@
 using MissionControl.Shared.Enums;
 using MissionControl.Shared.DataTransferObjects;
 using System.Diagnostics;
-using MissionControlLib.Exceptions;
 using MissionControl.Infrastructure;
+using MissionControl.Domain.Exceptions;
 
-namespace MissionControl.Domain
+namespace MissionControl.Application
 {
     public class MissionControler
     {
@@ -30,10 +30,11 @@ namespace MissionControl.Domain
 
         #region Public methods
 
-        public void Configure(MqttCommunicationConfig mqttConfig, NodeConfig nodeConfig)
+        public void Configure(MissionConfig missionConfig)
         {
-            _commHandler = new MqttCommHandler(mqttConfig);
-            _nodeConfig = nodeConfig;
+            _commHandler = new MqttCommHandler(missionConfig.MqttConfig);
+            _nodeConfig = missionConfig.NodeConfig;
+
             _isConfigured = true;
         }
 
