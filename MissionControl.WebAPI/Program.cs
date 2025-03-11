@@ -1,10 +1,14 @@
+using MissionControl.Infrastructure;
 using MissionControl.Application;
+using MissionControl.Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<MissionControlsManagerService>();
 
-builder.Services.AddSingleton<MissionControler>();  //singlet mc signleton for now, replace with serviceManager singleton instance
+// Register services needed for MissionControlService creation
+builder.Services.AddTransient<MissionControlService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

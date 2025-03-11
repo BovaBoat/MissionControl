@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MissionControl.Application\MissionControl.Application.csproj" />
+    <ProjectReference Include="..\MissionControl.Infrastructure\MissionControl.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

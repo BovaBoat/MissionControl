@@ -1,6 +1,5 @@
 ﻿using MissionControlDatabase.Models;
-using MissionControl.Shared;
-using MissionControl.Shared.DataTransferObjects;
+using MissionControl.Domain.Entities;
 
 namespace MissionControl.Database.Repository
 {
@@ -39,20 +38,4 @@ namespace MissionControl.Database.Repository
             InsertMessage((int)message.CommandCode, message.Payload.ToArray(), senderName);
         }
     }
-
-    #region Structures
-
-    public struct DatabaseConfig
-    {
-        public string ServerName;
-        public string DatabaseName;
-
-        public DatabaseConfig(string serverName, string databaseName)
-        {
-            ServerName = serverName;
-            DatabaseName = databaseName;
-        }
-    }
-
-    #endregion
 }

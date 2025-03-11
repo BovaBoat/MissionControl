@@ -10,9 +10,4 @@
     <PackageReference Include="MQTTnet" Version="4.3.6.1152" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MissionControl.Infrastructure\MissionControl.Infrastructure.csproj" />
-    <ProjectReference Include="..\MissionControl.Shared\MissionControl.Shared.csproj" />
-  </ItemGroup>
-
 </Project>

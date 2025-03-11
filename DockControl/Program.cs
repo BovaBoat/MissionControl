@@ -6,6 +6,7 @@ using MissionControl.Infrastructure;
 
 namespace DockControl
 {
+    /*
     internal class Program
     {
         //const string DB_SERVER_NAME = "LAPTOP-HA1AJVLV";
@@ -13,7 +14,7 @@ namespace DockControl
 
         //const string MISSION_CONTROL_NODE_NAME = "Andrija MC";
         //const string VESSEL_NODE_NAME = "Andrija Mock Boat";
-
+        /*
         static async Task Main(string[] args)
         {
             if (args.Length <= 0)
@@ -28,14 +29,14 @@ namespace DockControl
                 .WithParsed(parsedOptions => dockControlCmdOptions = parsedOptions);
 
             var destinationCoordinates = new Coordinates(dockControlCmdOptions.DestinationLatitude, dockControlCmdOptions.DestinationLongitude);
-            var navigationControl = new MissionControler();
+            var navigationControl = new MissionControlService();
 
             var communicationConfig = new MqttConfig
-            {
-                BrokerAddress = dockControlCmdOptions.BrokerAddress,
-                PublishTopic = dockControlCmdOptions.NavControlTopic,
-                SubscribeTopic = dockControlCmdOptions.BoatResponseTopic           
-            };
+                (
+                dockControlCmdOptions.BrokerAddress,
+                dockControlCmdOptions.NavControlTopic,
+                dockControlCmdOptions.BoatResponseTopic
+                );
 
             var nodeConfig = new NodeConfig(dockControlCmdOptions.MissionControlNodeName, dockControlCmdOptions.VesselName);
             var databaseConfig = new DatabaseConfig(dockControlCmdOptions.DatabaseName, dockControlCmdOptions.DatabaseServerName);
@@ -86,5 +87,5 @@ namespace DockControl
             Success = 0,        
         }
     }
-
+    */
 }

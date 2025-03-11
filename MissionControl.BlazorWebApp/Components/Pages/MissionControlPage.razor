@@ -46,7 +46,7 @@
 
     private async Task StartMission()
     {
-        var missionControler = new MissionControler();
+        var missionControler = new MissionControlService();
         var communicationConfig = new MqttConfig(ConfigData.BrokerAddress, ConfigData.PublishTopic, ConfigData.SubscribeTopic);
         var nodeConfig = new NodeConfig(ConfigData.VesselName, ConfigData.MissionControlName);
 

@@ -9,7 +9,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddSingleton<ConfigDataService>();
 builder.Services.AddScoped<MissionControlDataService>();
-builder.Services.AddScoped<MissionControl.Application.MissionControler>();
+builder.Services.AddScoped<MissionControl.Application.MissionControlService>();
 
 var app = builder.Build();
 

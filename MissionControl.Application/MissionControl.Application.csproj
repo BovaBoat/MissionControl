@@ -7,9 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MissionControl.Infrastructure\MissionControl.Infrastructure.csproj" />
-    <ProjectReference Include="..\MissionControl.Shared\MissionControl.Shared.csproj" />
-    <ProjectReference Include="..\MissionControlDatabase\MissionControl.Database.csproj" />
     <ProjectReference Include="..\MissionControlLib\MissionControl.Domain.csproj" />
   </ItemGroup>
 

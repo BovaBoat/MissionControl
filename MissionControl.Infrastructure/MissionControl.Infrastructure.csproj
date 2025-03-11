@@ -11,7 +11,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MissionControl.Shared\MissionControl.Shared.csproj" />
+    <ProjectReference Include="..\MissionControl.Application\MissionControl.Application.csproj" />
+    <ProjectReference Include="..\MissionControlLib\MissionControl.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SeaBus\" />
   </ItemGroup>
 
 </Project>

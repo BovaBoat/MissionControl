@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MissionControl.Shared\MissionControl.Shared.csproj" />
+    <ProjectReference Include="..\MissionControlLib\MissionControl.Domain.csproj" />
   </ItemGroup>
 
 </Project>

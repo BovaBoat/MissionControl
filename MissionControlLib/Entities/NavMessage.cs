@@ -1,13 +1,13 @@
 ﻿using MissionControl.Shared.Enums;
 
-namespace MissionControl.Shared.DataTransferObjects
+namespace MissionControl.Domain.Entities
 {
-    public class NavMessage
+    public class SeaBusMessage
     {
         public CommandCodeEnum CommandCode { get; }
         public List<byte>? Payload { get; }
 
-        public NavMessage(CommandCodeEnum commandCode, List<byte>? payload = null)
+        public SeaBusMessage(CommandCodeEnum commandCode, List<byte>? payload = null)
         {
             if (!IsComandCodeValid(commandCode))
             {

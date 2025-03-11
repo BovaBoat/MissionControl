@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MissionControl.Database.Repository;
+using MissionControl.Database;
 
 namespace MissionControlDatabase.Models;
 
